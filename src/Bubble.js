@@ -107,13 +107,6 @@ export default class Bubble extends React.Component {
     return null;
   }
 
-  renderTag() {
-    if (this.props.renderTag) {
-      return this.props.renderTag(this.props);
-    }
-    return null;
-  }
-
   renderTicks() {
     const {currentMessage} = this.props;
     if (this.props.renderTicks) {
@@ -175,6 +168,18 @@ export default class Bubble extends React.Component {
     }
     return null;
   }
+  renderAvatar() {
+    if (this.props.renderAvatar) {
+      return this.props.renderAvatar(this.props);
+    }
+    return null;
+  }
+  renderTag() {
+    if (this.props.renderTag) {
+      return this.props.renderTag(this.props);
+    }
+    return null;
+  }
   render() {
     return (
       <View
@@ -198,6 +203,9 @@ export default class Bubble extends React.Component {
               {this.renderMessageImage()}
               {this.renderMessageVideo()}
               {this.renderMessageText()}
+              <View style={[styles[this.props.position].tag]}>
+                {this.renderTag()}
+              </View>
               <View
                 style={[
                   styles[this.props.position].bottom,
@@ -206,10 +214,13 @@ export default class Bubble extends React.Component {
                 {this.renderUsername()}
                 {this.renderTime()}
                 {this.renderTicks()}
-                {this.renderTag()}
               </View>
             </View>
           </TouchableWithoutFeedback>
+        </View>
+        <View style={{justifyContent: 'flex-end'}}>
+          {this.renderAvatar()}
+          {this.renderTime()}
         </View>
       </View>
     );
@@ -222,6 +233,7 @@ const styles = {
       alignItems: 'flex-start',
     },
     wrapper: {
+      flex: 1,
       borderRadius: 15,
       backgroundColor: Color.leftBubbleBackground,
       marginRight: 60,
@@ -295,6 +307,7 @@ Bubble.defaultProps = {
   renderMessageText: null,
   renderCustomView: null,
   renderUsername: null,
+  renderAvatar: null,
   renderTag: null,
   renderTicks: null,
   renderTime: null,
@@ -326,6 +339,7 @@ Bubble.propTypes = {
   renderCustomView: PropTypes.func,
   renderUsernameOnMessage: PropTypes.bool,
   renderUsername: PropTypes.func,
+  renderAvatar: PropTypes.func,
   renderTag: PropTypes.func,
   renderTime: PropTypes.func,
   renderTicks: PropTypes.func,
