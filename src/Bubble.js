@@ -2,7 +2,14 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, Clipboard, StyleSheet, TouchableWithoutFeedback, View, ViewPropTypes } from 'react-native';
+import {
+  Text,
+  Clipboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  ViewPropTypes,
+} from 'react-native';
 
 import MessageText from './MessageText';
 import MessageImage from './MessageImage';
@@ -11,10 +18,9 @@ import MessageVideo from './MessageVideo';
 import Time from './Time';
 import Color from './Color';
 
-import { isSameUser, isSameDay } from './utils';
+import {isSameUser, isSameDay} from './utils';
 
 export default class Bubble extends React.Component {
-
   onLongPress = () => {
     if (this.props.onLongPress) {
       this.props.onLongPress(this.context, this.props.currentMessage);
@@ -29,7 +35,7 @@ export default class Bubble extends React.Component {
           options,
           cancelButtonIndex,
         },
-        (buttonIndex) => {
+        buttonIndex => {
           switch (buttonIndex) {
             case 0:
               Clipboard.setString(this.props.currentMessage.text);
@@ -70,7 +76,7 @@ export default class Bubble extends React.Component {
 
   renderMessageText() {
     if (this.props.currentMessage.text) {
-      const { containerStyle, wrapperStyle, ...messageTextProps } = this.props;
+      const {containerStyle, wrapperStyle, ...messageTextProps} = this.props;
       if (this.props.renderMessageText) {
         return this.props.renderMessageText(messageTextProps);
       }
@@ -81,7 +87,7 @@ export default class Bubble extends React.Component {
 
   renderMessageImage() {
     if (this.props.currentMessage.image) {
-      const { containerStyle, wrapperStyle, ...messageImageProps } = this.props;
+      const {containerStyle, wrapperStyle, ...messageImageProps} = this.props;
       if (this.props.renderMessageImage) {
         return this.props.renderMessageImage(messageImageProps);
       }
@@ -92,7 +98,7 @@ export default class Bubble extends React.Component {
 
   renderMessageVideo() {
     if (this.props.currentMessage.video) {
-      const { containerStyle, wrapperStyle, ...messageVideoProps } = this.props;
+      const {containerStyle, wrapperStyle, ...messageVideoProps} = this.props;
       if (this.props.renderMessageVideo) {
         return this.props.renderMessageVideo(messageVideoProps);
       }
@@ -101,29 +107,45 @@ export default class Bubble extends React.Component {
     return null;
   }
 
+  renderTag() {
+    if (this.props.renderTag) {
+      return this.props.renderTag(this.props);
+    }
+    return null;
+  }
+
   renderTicks() {
-    const { currentMessage } = this.props;
+    const {currentMessage} = this.props;
     if (this.props.renderTicks) {
       return this.props.renderTicks(currentMessage);
     }
     if (currentMessage.user._id !== this.props.user._id) {
       return null;
     }
-    if (currentMessage.sent || currentMessage.received || currentMessage.pending) {
+    if (
+      currentMessage.sent ||
+      currentMessage.received ||
+      currentMessage.pending
+    ) {
       return (
         <View style={styles.tickView}>
-          {currentMessage.sent && <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>}
-          {currentMessage.received && <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>}
-          {currentMessage.pending && <Text style={[styles.tick, this.props.tickStyle]}>🕓</Text>}
+          {currentMessage.sent && (
+            <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>
+          )}
+          {currentMessage.received && (
+            <Text style={[styles.tick, this.props.tickStyle]}>✓</Text>
+          )}
+          {currentMessage.pending && (
+            <Text style={[styles.tick, this.props.tickStyle]}>🕓</Text>
+          )}
         </View>
       );
     }
     return null;
   }
-
   renderTime() {
     if (this.props.currentMessage.createdAt) {
-      const { containerStyle, wrapperStyle, ...timeProps } = this.props;
+      const {containerStyle, wrapperStyle, ...timeProps} = this.props;
       if (this.props.renderTime) {
         return this.props.renderTime(timeProps);
       }
@@ -131,64 +153,68 @@ export default class Bubble extends React.Component {
     }
     return null;
   }
-
   renderUsername() {
-    const { currentMessage } = this.props;
+    const {currentMessage} = this.props;
     if (this.props.renderUsernameOnMessage) {
       if (currentMessage.user._id === this.props.user._id) {
         return null;
       }
       return (
         <View style={styles.usernameView}>
-          <Text style={[styles.username, this.props.usernameStyle]}>~ {currentMessage.user.name}</Text>
+          <Text style={[styles.username, this.props.usernameStyle]}>
+            ~ {currentMessage.user.name}
+          </Text>
         </View>
       );
     }
     return null;
   }
-
   renderCustomView() {
     if (this.props.renderCustomView) {
       return this.props.renderCustomView(this.props);
     }
     return null;
   }
-
   render() {
     return (
-      <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
+      <View
+        style={[
+          styles[this.props.position].container,
+          this.props.containerStyle[this.props.position],
+        ]}>
         <View
           style={[
             styles[this.props.position].wrapper,
             this.props.wrapperStyle[this.props.position],
             this.handleBubbleToNext(),
             this.handleBubbleToPrevious(),
-          ]}
-        >
+          ]}>
           <TouchableWithoutFeedback
             onLongPress={this.onLongPress}
             accessibilityTraits="text"
-            {...this.props.touchableProps}
-          >
+            {...this.props.touchableProps}>
             <View>
               {this.renderCustomView()}
               {this.renderMessageImage()}
               {this.renderMessageVideo()}
               {this.renderMessageText()}
-              <View style={[styles[this.props.position].bottom, this.props.bottomContainerStyle[this.props.position]]}>
+              <View
+                style={[
+                  styles[this.props.position].bottom,
+                  this.props.bottomContainerStyle[this.props.position],
+                ]}>
                 {this.renderUsername()}
                 {this.renderTime()}
                 {this.renderTicks()}
               </View>
             </View>
+            {this.renderTag()}
           </TouchableWithoutFeedback>
         </View>
       </View>
     );
   }
-
 }
-
 const styles = {
   left: StyleSheet.create({
     container: {
@@ -257,7 +283,6 @@ const styles = {
     marginHorizontal: 10,
   },
 };
-
 Bubble.contextTypes = {
   actionSheet: PropTypes.func,
 };
@@ -270,6 +295,7 @@ Bubble.defaultProps = {
   renderMessageText: null,
   renderCustomView: null,
   renderUsername: null,
+  renderTag: null,
   renderTicks: null,
   renderTime: null,
   position: 'left',
@@ -300,6 +326,7 @@ Bubble.propTypes = {
   renderCustomView: PropTypes.func,
   renderUsernameOnMessage: PropTypes.bool,
   renderUsername: PropTypes.func,
+  renderTag: PropTypes.func,
   renderTime: PropTypes.func,
   renderTicks: PropTypes.func,
   position: PropTypes.oneOf(['left', 'right']),
