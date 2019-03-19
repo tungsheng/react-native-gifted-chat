@@ -206,8 +206,8 @@ export default class Bubble extends React.Component {
                 {this.renderUsername()}
                 {this.renderTime()}
                 {this.renderTicks()}
+                {this.renderTag()}
               </View>
-              {this.renderTag()}
             </View>
           </TouchableWithoutFeedback>
         </View>
