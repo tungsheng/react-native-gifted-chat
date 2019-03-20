@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
   ViewPropTypes,
+  Dimensions, // 2019.03.20 Tony Lee
 } from 'react-native';
 
 import MessageText from './MessageText';
@@ -19,6 +20,8 @@ import Time from './Time';
 import Color from './Color';
 
 import {isSameUser, isSameDay} from './utils';
+
+const {width} = Dimensions.get('window'); // 2019.03.20 Tony Lee
 
 export default class Bubble extends React.Component {
   onLongPress = () => {
@@ -168,18 +171,21 @@ export default class Bubble extends React.Component {
     }
     return null;
   }
+  // 2019.03.20 Tony Lee
   renderAvatar() {
     if (this.props.renderAvatar) {
       return this.props.renderAvatar(this.props);
     }
     return null;
   }
+  // 2019.03.20 Tony Lee
   renderTag() {
     if (this.props.renderTag) {
       return this.props.renderTag(this.props);
     }
     return null;
   }
+  // 2019.03.20 Tony Lee
   render() {
     return (
       <View
@@ -187,6 +193,12 @@ export default class Bubble extends React.Component {
           styles[this.props.position].container,
           this.props.containerStyle[this.props.position],
         ]}>
+        {this.props.position === 'right' && (
+          <View style={{justifyContent: 'flex-end'}}>
+            {this.renderAvatar()}
+            {this.renderTime()}
+          </View>
+        )}
         <View
           style={[
             styles[this.props.position].wrapper,
@@ -199,29 +211,42 @@ export default class Bubble extends React.Component {
             accessibilityTraits="text"
             {...this.props.touchableProps}>
             <View>
-              {this.renderCustomView()}
-              {this.renderMessageImage()}
-              {this.renderMessageVideo()}
-              {this.renderMessageText()}
-              <View style={[styles[this.props.position].tag]}>
-                {this.renderTag()}
+              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                {this.props.position === 'left' && (
+                  <View style={[this.props.tagStyle[this.props.position]]}>
+                    {this.renderTag()}
+                  </View>
+                )}
+                <View style={{flexDirection: 'column'}}>
+                  {this.renderCustomView()}
+                  {this.renderMessageImage()}
+                  {this.renderMessageVideo()}
+                  {this.renderMessageText()}
+                </View>
+                {this.props.position === 'right' && (
+                  <View style={[this.props.tagStyle[this.props.position]]}>
+                    {this.renderTag()}
+                  </View>
+                )}
               </View>
+
               <View
                 style={[
                   styles[this.props.position].bottom,
                   this.props.bottomContainerStyle[this.props.position],
                 ]}>
                 {this.renderUsername()}
-                {this.renderTime()}
                 {this.renderTicks()}
               </View>
             </View>
           </TouchableWithoutFeedback>
         </View>
-        <View style={{justifyContent: 'flex-end'}}>
-          {this.renderAvatar()}
-          {this.renderTime()}
-        </View>
+        {this.props.position === 'left' && (
+          <View style={{justifyContent: 'flex-end'}}>
+            {this.renderAvatar()}
+            {this.renderTime()}
+          </View>
+        )}
       </View>
     );
   }
@@ -231,12 +256,13 @@ const styles = {
     container: {
       flex: 1,
       alignItems: 'flex-start',
+      flexDirection: 'row',
     },
     wrapper: {
-      flex: 1,
       borderRadius: 15,
       backgroundColor: Color.leftBubbleBackground,
       marginRight: 60,
+      maxWidth: width / 1.5, // 2019.03.20 Tony Lee
       minHeight: 20,
       justifyContent: 'flex-end',
     },
@@ -255,11 +281,13 @@ const styles = {
     container: {
       flex: 1,
       alignItems: 'flex-end',
+      flexDirection: 'row', // 2019.03.20 Tony Lee
     },
     wrapper: {
       borderRadius: 15,
       backgroundColor: Color.defaultBlue,
       marginLeft: 60,
+      maxWidth: width / 1.5, // 2019.03.20 Tony Lee
       minHeight: 20,
       justifyContent: 'flex-end',
     },
