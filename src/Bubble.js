@@ -212,7 +212,7 @@ export default class Bubble extends React.Component {
             {...this.props.touchableProps}>
             <View>
               <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                {this.props.position === 'left' && (
+                {this.props.tagStyle && this.props.position === 'left' && (
                   <View style={[this.props.tagStyle[this.props.position]]}>
                     {this.renderTag()}
                   </View>
@@ -227,7 +227,7 @@ export default class Bubble extends React.Component {
                   {this.renderMessageVideo()}
                   {this.renderMessageText()}
                 </View>
-                {this.props.position === 'right' && (
+                {this.props.tagStyle && this.props.position === 'right' && (
                   <View style={[this.props.tagStyle[this.props.position]]}>
                     {this.renderTag()}
                   </View>
