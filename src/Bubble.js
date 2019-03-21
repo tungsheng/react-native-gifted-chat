@@ -217,7 +217,11 @@ export default class Bubble extends React.Component {
                     {this.renderTag()}
                   </View>
                 )}
-                <View style={{flexDirection: 'column'}}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    maxWidth: width / 1.5, // 2019.03.20 Tony Lee
+                  }}>
                   {this.renderCustomView()}
                   {this.renderMessageImage()}
                   {this.renderMessageVideo()}
@@ -262,7 +266,6 @@ const styles = {
       borderRadius: 15,
       backgroundColor: Color.leftBubbleBackground,
       marginRight: 60,
-      maxWidth: width / 1.5, // 2019.03.20 Tony Lee
       minHeight: 20,
       justifyContent: 'flex-end',
     },
@@ -287,7 +290,6 @@ const styles = {
       borderRadius: 15,
       backgroundColor: Color.defaultBlue,
       marginLeft: 60,
-      maxWidth: width / 1.5, // 2019.03.20 Tony Lee
       minHeight: 20,
       justifyContent: 'flex-end',
     },
