@@ -259,7 +259,7 @@ const styles = {
   left: StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: 'flex-start',
+      alignItems: 'flex-end', // 2019.03.22 Howie, before {alignItems: 'flex-start'}
       flexDirection: 'row',
     },
     wrapper: {
@@ -285,6 +285,7 @@ const styles = {
       flex: 1,
       alignItems: 'flex-end',
       flexDirection: 'row', // 2019.03.20 Tony Lee
+      justifyContent: 'flex-end', // 2019.03.22 Howie, to make the align of whole content correct
     },
     wrapper: {
       borderRadius: 15,

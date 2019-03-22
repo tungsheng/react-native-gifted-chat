@@ -111,8 +111,8 @@ export default class Message extends React.Component {
           <View
             style={[
               styles[this.props.position].container,
-              { marginBottom: sameUser ? 2 : 10 },
-              !this.props.inverted && { marginBottom: 2 },
+              { marginBottom: sameUser ? 4 : 10 }, // 2019.03.22 Howie, before { marginBottom: sameUser ? 2 : 10 }
+              !this.props.inverted && { marginBottom: 4 }, // 2019.03.22 Howie, before { marginBottom: 2 }
               this.props.containerStyle[this.props.position],
             ]}
           >
