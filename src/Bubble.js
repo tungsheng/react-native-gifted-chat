@@ -23,6 +23,12 @@ import {isSameUser, isSameDay} from './utils';
 
 const {width} = Dimensions.get('window'); // 2019.03.20 Tony Lee
 
+const MSG_STATUS = {
+  SUCCESS: 'SUCCESS',
+  PENDING: 'PENDING',
+  FAIL: 'FAIL',
+};
+
 export default class Bubble extends React.Component {
   onLongPress = () => {
     if (this.props.onLongPress) {
@@ -139,6 +145,17 @@ export default class Bubble extends React.Component {
     }
     return null;
   }
+  renderStatus() {
+    if (this.props.currentMessage.status === MSG_STATUS.FAIL) {
+      const statusStyle = {
+        marginVertical: 2,
+        marginHorizontal: 5,
+        color: 'red',
+      };
+      return <Text style={statusStyle}>send failed</Text>;
+    }
+    return null;
+  }
   renderTime() {
     if (this.props.currentMessage.createdAt) {
       const {containerStyle, wrapperStyle, ...timeProps} = this.props;
@@ -196,6 +213,7 @@ export default class Bubble extends React.Component {
         {this.props.position === 'right' && (
           <View style={{justifyContent: 'flex-end'}}>
             {this.renderAvatar()}
+            {this.renderStatus()}
             {this.renderTime()}
           </View>
         )}
