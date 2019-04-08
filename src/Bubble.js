@@ -147,12 +147,15 @@ export default class Bubble extends React.Component {
   }
   renderStatus() {
     if (this.props.currentMessage.status === MSG_STATUS.FAIL) {
+      const {statusText} = this.props;
       const statusStyle = {
         marginVertical: 2,
         marginHorizontal: 5,
-        color: 'red',
+        color: 'rgb(221, 38, 75)',
+        fontSize: 10,
+        textAlign: 'center',
       };
-      return <Text style={statusStyle}>send failed</Text>;
+      return <Text style={statusStyle}>{statusText || 'Not Delivered'}</Text>;
     }
     return null;
   }
@@ -360,6 +363,7 @@ Bubble.defaultProps = {
   renderTag: null,
   renderTicks: null,
   renderTime: null,
+  statusText: '',
   position: 'left',
   optionTitles: ['Copy Text', 'Cancel'],
   currentMessage: {
@@ -392,6 +396,7 @@ Bubble.propTypes = {
   renderTag: PropTypes.func,
   renderTime: PropTypes.func,
   renderTicks: PropTypes.func,
+  statusText: PropTypes.string,
   position: PropTypes.oneOf(['left', 'right']),
   optionTitles: PropTypes.arrayOf(PropTypes.string),
   currentMessage: PropTypes.object,
