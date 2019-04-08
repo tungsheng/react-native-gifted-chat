@@ -23,6 +23,12 @@ import {isSameUser, isSameDay} from './utils';
 
 const {width} = Dimensions.get('window'); // 2019.03.20 Tony Lee
 
+const MSG_STATUS = {
+  SUCCESS: 'SUCCESS',
+  PENDING: 'PENDING',
+  FAIL: 'FAIL',
+};
+
 export default class Bubble extends React.Component {
   onLongPress = () => {
     if (this.props.onLongPress) {
@@ -139,6 +145,20 @@ export default class Bubble extends React.Component {
     }
     return null;
   }
+  renderStatus() {
+    if (this.props.currentMessage.status === MSG_STATUS.FAIL) {
+      const {statusText} = this.props;
+      const statusStyle = {
+        marginVertical: 2,
+        marginHorizontal: 5,
+        color: 'rgb(221, 38, 75)',
+        fontSize: 10,
+        textAlign: 'center',
+      };
+      return <Text style={statusStyle}>{statusText || 'Not Delivered'}</Text>;
+    }
+    return null;
+  }
   renderTime() {
     if (this.props.currentMessage.createdAt) {
       const {containerStyle, wrapperStyle, ...timeProps} = this.props;
@@ -196,6 +216,7 @@ export default class Bubble extends React.Component {
         {this.props.position === 'right' && (
           <View style={{justifyContent: 'flex-end'}}>
             {this.renderAvatar()}
+            {this.renderStatus()}
             {this.renderTime()}
           </View>
         )}
@@ -259,7 +280,7 @@ const styles = {
   left: StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: 'flex-start',
+      alignItems: 'flex-end', // 2019.03.22 Howie, before {alignItems: 'flex-start'}
       flexDirection: 'row',
     },
     wrapper: {
@@ -285,6 +306,7 @@ const styles = {
       flex: 1,
       alignItems: 'flex-end',
       flexDirection: 'row', // 2019.03.20 Tony Lee
+      justifyContent: 'flex-end', // 2019.03.22 Howie, to make the align of whole content correct
     },
     wrapper: {
       borderRadius: 15,
@@ -341,6 +363,7 @@ Bubble.defaultProps = {
   renderTag: null,
   renderTicks: null,
   renderTime: null,
+  statusText: '',
   position: 'left',
   optionTitles: ['Copy Text', 'Cancel'],
   currentMessage: {
@@ -373,6 +396,7 @@ Bubble.propTypes = {
   renderTag: PropTypes.func,
   renderTime: PropTypes.func,
   renderTicks: PropTypes.func,
+  statusText: PropTypes.string,
   position: PropTypes.oneOf(['left', 'right']),
   optionTitles: PropTypes.arrayOf(PropTypes.string),
   currentMessage: PropTypes.object,
